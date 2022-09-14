@@ -1,19 +1,5 @@
-import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
-import Router from "./Router";
 import { createGlobalStyle } from "styled-components";
-import { ReactQueryDevtools } from "react-query/devtools";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
-import { darkTheme, lightTheme } from "./theme";
-import { ThemeProvider } from "styled-components";
-import { isDarkAtom } from "./atoms";
-
+import ToDoList from "./components/ToDoList";
 const GlobalStyle = createGlobalStyle`
  @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -81,19 +67,18 @@ a{
 `;
 
 function App() {
-  // const count = useRecoilValue(isDarkModeState);
-  const isDark = useRecoilValue(isDarkAtom);
-
   return (
     <>
-      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-        <GlobalStyle />
-        <Router />
-        <ReactQueryDevtools initialIsOpen={true} />
-        {/*  ReactQuery 캐시 저장된데이터를 시각화해줌 */}
-      </ThemeProvider>
+      <GlobalStyle />
+      <ToDoList />
     </>
   );
 }
 
 export default App;
+{
+  /* <ReactQueryDevtools initialIsOpen={true} /> */
+}
+{
+  /*  ReactQuery 캐시 저장된데이터를 시각화해줌 */
+}
