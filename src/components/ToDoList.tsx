@@ -87,7 +87,7 @@ function ToDoList() {
             ))}
           </select>
         </Category>
-        <button onClick={addCategory}>카테고리 추가하기</button>
+        <button onClick={addCategory}>카테고리 추가</button>
       </Container>
 
       <Container>
