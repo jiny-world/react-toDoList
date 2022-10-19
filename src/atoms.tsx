@@ -24,13 +24,12 @@ export interface IToDo {
 
 export const categoryState = atom<string>({
   key: "category",
-  default: defaultCategories[0],
+  default: "",
 });
 
 export const categoriseState = atom<string[]>({
   key: "categories",
   default: JSON.parse(JSON.stringify(defaultCategories)),
-  // JSON.parse(localStorage.getItem("toDoData"))["categories"] ??,
   effects_UNSTABLE: [persistAtom],
 });
 

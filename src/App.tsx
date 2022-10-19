@@ -1,5 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 import ToDoList from "./components/ToDoList";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
+
 const GlobalStyle = createGlobalStyle`
  @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -67,10 +70,14 @@ a{
 `;
 
 function App() {
+  const queryClient = new QueryClient();
   return (
     <>
+      {/* <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={true} /> */}
       <GlobalStyle />
       <ToDoList />
+      {/* </QueryClientProvider> */}
     </>
   );
 }
