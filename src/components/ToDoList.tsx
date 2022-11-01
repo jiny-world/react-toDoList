@@ -1,27 +1,39 @@
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleMinus, faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleMinus,
+  faCirclePlus,
+  faLightbulb,
+  faMoon,
+} from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-import { categoryState, toDoSelector, categoriseState } from "../atoms";
-import React, { useRef } from "react";
+import {
+  categoryState,
+  toDoSelector,
+  categoriseState,
+  isDarkModeState,
+} from "../atoms";
+import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const Container = styled.div`
   position: relative;
   margin: 25px auto;
-  background-color: #dfe6e9;
+  background-color: ${(props) => props.theme.bgColor};
   border-radius: 10px;
   padding: 20px;
   font-size: 16px;
   display: grid;
   width: 65%;
+  max-width: 700px;
+  border: 2px solid ${(props) => props.theme.borderColor};
 `;
 
 const Header = styled.div`
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 35px;
   margin-bottom: 20px;
   text-align: center;
 `;
@@ -34,11 +46,26 @@ const Category = styled.div`
   justify-content: center;
 `;
 
+const HeaderBtn = styled.div`
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  span {
+    font-size: 10px;
+  }
+`;
+
 const Item = styled(motion.div)`
   border-radius: 10px;
   font-size: 22px;
   background-color: white;
-  color: #fd79a8;
+  color: ${(props) => props.theme.accentColor};
   height: 100px;
   display: flex;
   flex-direction: column;
@@ -47,17 +74,18 @@ const Item = styled(motion.div)`
   /* box-shadow: 1px 4px 0 rgb(0 0 0 / 50%); */
   &:active {
     position: relative;
-    /* background-color: #fd79a8;
-    color: white; */
   }
+`;
+
+const SelectItem = styled(motion.div)`
+  background-color: ${(props) => props.theme.accentColor};
+  color: white;
 `;
 const itemVariants = {
   hover: {
     scale: 1.1,
   },
   active: {
-    // backgroundColor: "#fd79a8",
-    // color: "white",
     top: "2px",
   },
 };
@@ -67,6 +95,7 @@ function ToDoList() {
   const [category, setCategory] = useRecoilState(categoryState); // 현재 선택한 카테고리
   const [categories, setCategories] = useRecoilState(categoriseState); // 전체 카테고리 목록
 
+  const [isDarkMode, setIsDarkMode] = useRecoilState(isDarkModeState);
   // 카테고리 변경
   const onInputChange = (event: React.FormEvent<HTMLDivElement>) => {
     setCategory(event.currentTarget.innerText as any);
@@ -94,7 +123,9 @@ function ToDoList() {
           return data != category;
         });
         setCategories(newCategory);
-        setCategory(newCategory.length == 0 ? "" : categories[0]);
+
+        console.log(newCategory.length);
+        setCategory(newCategory.length == 0 ? "" : newCategory[0]);
         alert(`삭제되었습니다.`);
       } else {
         alert(`취소되었습니다.`);
@@ -104,22 +135,43 @@ function ToDoList() {
     }
   };
 
+  const changeDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
   return (
     <>
       <Container>
-        <Header>Todo-List !</Header>
+        <Header
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 2fr 1fr",
+          }}
+        >
+          <HeaderBtn>Reset</HeaderBtn>
+          <div>Category !</div>
+          <HeaderBtn onClick={changeDarkMode}>
+            {isDarkMode ? (
+              <>
+                <FontAwesomeIcon icon={faLightbulb} />{" "}
+                <span>&nbsp;Light Mode</span>
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faMoon} /> <span>&nbsp;Dark Mode</span>
+              </>
+            )}
+          </HeaderBtn>
+        </Header>
         <Category>
           {categories.map((item) =>
             item == category ? (
               <Item
+                as={SelectItem}
                 variants={itemVariants}
                 whileHover="hover"
                 onClick={onInputChange}
                 key={item}
-                style={{
-                  backgroundColor: "#fd79a8",
-                  color: "white",
-                }}
               >
                 {item}
               </Item>
@@ -152,11 +204,22 @@ function ToDoList() {
       </Container>
 
       <Container>
+        <Header>Todo-List !</Header>
+
         <CreateToDo />
-        {toDoDate.map((toDo) => (
-          <ToDo key={toDo.id} {...toDo} />
-        ))}
       </Container>
+
+      {toDoDate.length != 0 ? (
+        <Container
+          style={{
+            padding: "0",
+          }}
+        >
+          {toDoDate.map((toDo) => (
+            <ToDo key={toDo.id} {...toDo} />
+          ))}
+        </Container>
+      ) : null}
     </>
   );
 }

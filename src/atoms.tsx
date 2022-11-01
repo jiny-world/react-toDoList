@@ -48,3 +48,8 @@ export const toDoSelector = selector({
     return toDos.filter((toDo) => toDo.category === category);
   },
 });
+
+export const isDarkModeState = atom({
+  key: "isDark",
+  default: false,
+});

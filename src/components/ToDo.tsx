@@ -2,11 +2,46 @@ import { IToDo, toDoState, categoryState, categoriseState } from "../atoms";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
+
 const TodoItem = styled.li`
   padding: 15px;
-  font-size: 15px;
-  border-bottom: 1px solid white;
+  font-size: 18px;
+  border-bottom: 1px solid grey;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  :last-child {
+    border-bottom: 0px;
+  }
+  color: ${(props) => props.theme.textColor};
 `;
+const Todo = styled.span``;
+
+const Buttons = styled.div`
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat(3, 1fr);
+`;
+
+const Btn = styled(motion.button)`
+  background-color: white;
+  border: 0px;
+  color: ${(props) => props.theme.accentColor};
+  font-size: 15px;
+  border-radius: 5px;
+  font-weight: 700;
+`;
+
+const itemVariants = {
+  hover: {
+    scale: 1.1,
+  },
+  active: {
+    top: "2px",
+  },
+};
 
 function ToDo({ text, category, id }: IToDo) {
   const setToDos = useSetRecoilState(toDoState);
@@ -27,7 +62,7 @@ function ToDo({ text, category, id }: IToDo) {
   };
 
   const DeleteTodo = (text: string) => {
-    const confirm = window.confirm(text + " 삭제하시겠습니까?");
+    const confirm = window.confirm(`<${text}>를 삭제하시겠습니까?`);
     if (confirm == true) {
       setToDos((prevToDos) => {
         // const targetIndex = prevToDos.findIndex((toDo) => toDo.id === id);
@@ -41,18 +76,33 @@ function ToDo({ text, category, id }: IToDo) {
   const currentCategory = useRecoilValue(categoryState);
   return (
     <TodoItem>
-      {text}
-      <br />
-      {categories.map((cate) => (
-        <button
-          disabled={cate == currentCategory}
-          name={cate + ""}
-          onClick={onClick}
+      <Todo>{text}</Todo>
+      <Buttons>
+        {categories.map((cate) =>
+          cate !== currentCategory ? (
+            <Btn
+              variants={itemVariants}
+              whileHover="hover"
+              key={cate + ""}
+              name={cate + ""}
+              onClick={onClick}
+            >
+              {cate}
+            </Btn>
+          ) : null
+        )}
+        <Btn
+          variants={itemVariants}
+          whileHover="hover"
+          onClick={() => DeleteTodo(text)}
+          style={{
+            backgroundColor: "#BB2D3B",
+            color: "white",
+          }}
         >
-          {cate}
-        </button>
-      ))}
-      <button onClick={() => DeleteTodo(text)}>삭제</button>
+          삭제
+        </Btn>
+      </Buttons>
     </TodoItem>
   );
 }

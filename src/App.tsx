@@ -1,7 +1,10 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 import ToDoList from "./components/ToDoList";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { useRecoilValue } from "recoil";
+import { isDarkModeState } from "./atoms";
+import { darkTheme, lightTheme } from "./theme";
 
 const GlobalStyle = createGlobalStyle`
  @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400&display=swap');
@@ -71,12 +74,16 @@ a{
 
 function App() {
   const queryClient = new QueryClient();
+  const isDarkMode = useRecoilValue(isDarkModeState);
+
   return (
     <>
       {/* <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={true} /> */}
-      <GlobalStyle />
-      <ToDoList />
+      <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <ToDoList />
+      </ThemeProvider>
       {/* </QueryClientProvider> */}
     </>
   );
