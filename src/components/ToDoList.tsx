@@ -42,7 +42,7 @@ const Category = styled.div`
   font-weight: 700;
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 130px));
+  grid-template-columns: repeat(auto-fit, minmax(50px, 95px));
   justify-content: center;
 `;
 
@@ -136,6 +136,10 @@ function ToDoList() {
   };
 
   const changeDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const resetTodoData = () => {
     setIsDarkMode(!isDarkMode);
   };
 
