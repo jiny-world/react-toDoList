@@ -153,7 +153,7 @@ function ToDoList() {
           <HeaderBtn onClick={changeDarkMode}>
             {isDarkMode ? (
               <>
-                <FontAwesomeIcon icon={faLightbulb} />{" "}
+                <FontAwesomeIcon icon={faLightbulb} />
                 <span>&nbsp;Light Mode</span>
               </>
             ) : (
