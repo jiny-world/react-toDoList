@@ -18,6 +18,7 @@ import {
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { inflate } from "zlib";
 
 const Container = styled.div`
   position: relative;
@@ -140,7 +141,9 @@ function ToDoList() {
   };
 
   const resetTodoData = () => {
-    setIsDarkMode(!isDarkMode);
+    if (window.confirm(`카테고리, 리스트 정보를 초기화합니다.`)) {
+      localStorage.removeItem("toDoData");
+    }
   };
 
   return (
@@ -152,7 +155,7 @@ function ToDoList() {
             gridTemplateColumns: "1fr 2fr 1fr",
           }}
         >
-          <HeaderBtn>Reset</HeaderBtn>
+          <HeaderBtn onClick={resetTodoData}></HeaderBtn>
           <div>Category !</div>
           <HeaderBtn onClick={changeDarkMode}>
             {isDarkMode ? (
