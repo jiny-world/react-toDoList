@@ -155,7 +155,7 @@ function ToDoList() {
             gridTemplateColumns: "1fr 2fr 1fr",
           }}
         >
-          <HeaderBtn onClick={resetTodoData}></HeaderBtn>
+          <HeaderBtn onClick={resetTodoData}> </HeaderBtn>
           <div>Category !</div>
           <HeaderBtn onClick={changeDarkMode}>
             {isDarkMode ? (
